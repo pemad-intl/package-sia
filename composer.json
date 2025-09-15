@@ -1,0 +1,36 @@
+{
+    "name": "digipemad/sia",
+    "description": "Sekolah packages for Laravel",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Digipemad\\Sia\\Academic\\": "Academic/src",
+            "Digipemad\\Sia\\Administration\\": "Administration/src",
+            "Digipemad\\Sia\\Boarding\\": "Boarding/src",
+            "Digipemad\\Sia\\Counseling\\": "Counseling/src",
+            "Digipemad\\Sia\\Teacher\\": "Teacher/src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Digipemad\\Sia\\Academic\\AcademicServiceProvider",
+                "Digipemad\\Sia\\Administration\\AdministrationServiceProvider",
+                "Digipemad\\Sia\\Boarding\\BoardingServiceProvider",
+                "Digipemad\\Sia\\Counseling\\CounselingServiceProvider",
+                "Digipemad\\Sia\\Teacher\\TeacherServiceProvider"
+            ],
+            "aliases": {
+                "Academic": "Digipemad\\Sia\\Academic\\Facades\\Academic",
+                "Administration": "Digipemad\\Sia\\Administration\\Facades\\Administration",
+                "Boarding": "Digipemad\\Sia\\Boarding\\Facades\\Boarding",
+                "Counseling": "Digipemad\\Sia\\Counseling\\Facades\\Counseling",
+                "Teacher": "Digipemad\\Sia\\Teacher\\Facades\\Teacher"
+            }
+        }
+    },
+    "require": {
+        "php": ">=8.0",
+        "illuminate/support": "^10.0"
+    }
+}

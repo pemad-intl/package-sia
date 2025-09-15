@@ -1,0 +1,68 @@
+<?php
+
+namespace Digipemad\Sia\Administration\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class SchoolFacilityRequest extends Model
+{
+    use SoftDeletes;
+
+    /**
+     * The table associated with the model.
+     */
+    protected $table = 'sch_fclt_requests';
+
+    /**
+     * The attributes that are mass assignable.
+     */
+    protected $fillable = [
+        'fclt_id', 'applicant_id', 'purpose', 'accepted_at', 'accepter_id'
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     */
+    protected $hidden = [
+        'fclt_id', 'applicant_id', 'accepter_id'
+    ];
+
+    /**
+     * The attributes that define value is a instance of carbon.
+     */
+    protected $dates = [
+        'accepted_at', 'deleted_at', 'created_at', 'updated_at'
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     */
+    protected $casts = [];
+
+    /**
+     * The accessors to append to the model's array form.
+     */
+    protected $appends = [];
+
+    /**
+     * This belongs to facility.
+     */
+    public function facility () {
+        return $this->belongsTo(SchoolFacility::class, 'fclt_id')->withDefault();
+    }
+
+    /**
+     * This belongs to applicant.
+     */
+    public function applicant () {
+        return $this->belongsTo(\Modules\Account\Models\User::class, 'applicant_id')->withDefault();
+    }
+
+    /**
+     * This belongs to accepter.
+     */
+    public function accepter () {
+        return $this->belongsTo(SchoolFacilityOperator::class, 'accepter_id')->withDefault();
+    }
+}
