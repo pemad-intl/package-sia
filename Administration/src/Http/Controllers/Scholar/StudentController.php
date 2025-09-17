@@ -29,13 +29,12 @@ class StudentController extends Controller
 
         $trashed = $request->get('trash');
 
-        $students = Student::with('user', 'generation')->where('grade_id', userGrades())->search($request->get('search'))->when($trashed, function($query, $trashed) {
+        $students = Student::with('user', 'generation')->search($request->get('search'))->when($trashed, function($query, $trashed) {
             return $query->onlyTrashed();
         })
-        ->where('grade_id', auth()->user()->employee->grade_id)
         ->orderByDesc('id')->paginate($request->get('limit', 10));
 
-        $students_count = Student::where('grade_id', userGrades())->count();
+        $students_count = Student::count();
 
         return view('administration::scholar.students.index', compact('students', 'students_count'));
     }
@@ -64,9 +63,7 @@ class StudentController extends Controller
 
         $password = 'password';
 
-        if($student = Student::completeInsert($request->merge([
-            'grade_id' => userGrades()
-        ]), $password)){
+        if ($student = Student::completeInsert($request, $password)) {
             Auth::user()->log(
                 ' Siswa bernama '.$student->user->name.' telah ditambahkan '.
                 ' <strong>[ID: ' . $student->id . ']</strong>',
@@ -106,9 +103,7 @@ class StudentController extends Controller
 
         if($student->trashed() || $student->id == auth()->id()) abort(404);
         
-        if($student = Student::completeUpdate($student, $request->merge([
-            'grade_id' => userGrades()
-        ]))){
+        if($student = Student::completeUpdate($student, $request)){
             Auth::user()->log(
                 ' Siswa bernama '.$student->user->name.' telah diperbarui '.
                 ' <strong>[ID: ' . $student->id . ']</strong>',

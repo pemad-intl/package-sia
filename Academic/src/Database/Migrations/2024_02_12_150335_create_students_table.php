@@ -24,7 +24,6 @@ class CreateStudentsTable extends Migration
             $table->string('avatar')->nullable();
             $table->dateTime('graduated_at')->nullable();
             $table->string('graduated_avatar')->nullable();
-            $table->foreignId('grade_id')->constrained('ref_grades')->onUpdate('cascade')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
 

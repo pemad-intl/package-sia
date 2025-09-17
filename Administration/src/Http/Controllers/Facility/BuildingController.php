@@ -22,7 +22,7 @@ class BuildingController extends Controller
 
     	$trashed = $request->get('trash', 0);
 
-    	$buildings = SchoolBuilding::where('grade_id', userGrades())->where('name', 'like', '%'.$request->get('search').'%')->when($trashed, function($query, $trashed) {
+    	$buildings = SchoolBuilding::where('name', 'like', '%'.$request->get('search').'%')->when($trashed, function($query, $trashed) {
             return $query->onlyTrashed();
         })->paginate($request->get('limit', 10));
 
@@ -37,7 +37,6 @@ class BuildingController extends Controller
 
         $building = new SchoolBuilding([
             'kd' => $request->input('kd'),
-            'grade_id' => userGrades(),
             'name' => $request->input('name'),
             'address' => $request->input('address'),
             'rt' => $request->input('rt'),
@@ -69,7 +68,6 @@ class BuildingController extends Controller
 
         if($building->update([
             'kd' => $request->input('kd'),
-            'grade_id' => userGrades(),
             'name' => $request->input('name'),
             'address' => $request->input('address'),
             'rt' => $request->input('rt'),

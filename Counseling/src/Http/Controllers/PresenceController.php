@@ -26,12 +26,8 @@ class PresenceController extends Controller
         $user = auth()->user();
 
         $presenceList = AcademicSubjectMeetPlan::$presenceList;
-        $grades = GradeLevel::where('grade_id', userGrades())->pluck('id');
 
         $presences = AcademicClassroomPresence::where('classroom_id', $request->get('classroom'))
-        ->whereHas('classroom', function ($classroom) use ($request, $grades) {
-            return $classroom->whereIn('level_id', $grades);
-        })
         ->get();
 
         $currentClassroom = AcademicClassroom::with('stsems.student')->find($request->get('classroom'));
@@ -47,13 +43,12 @@ class PresenceController extends Controller
         $this->authorize('store', AcademicClassroomPresence::class);
 
         $acsem = $this->acsem->load('classrooms');
-        $grades = GradeLevel::where('grade_id', userGrades())->pluck('id');
         $user = auth()->user();
 
         $presenceList = AcademicSubjectMeetPlan::$presenceList;
         $types = StudentSemesterAssessment::$type;
 
-        $currentClassroom = AcademicClassroom::with('stsems')->whereIn('level_id', $grades)->find($request->get('classroom'));
+        $currentClassroom = AcademicClassroom::with('stsems')->find($request->get('classroom'));
 
         return view('counseling::presences.create', compact('acsem', 'user', 'presenceList', 'types', 'currentClassroom'));
     }

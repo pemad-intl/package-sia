@@ -238,7 +238,6 @@ class AdministrationBillDatabaseSeeder extends Seeder
     private function loopEducation($data, $flag){
         foreach ($data as $batchNumber => $categories) {
             $batch = SchoolBillCycleSemesters::create([
-                'grade_id' => $flag,
                 'name' => "Gelombang {$batchNumber}",
                 'semester_id' => 75,
             ]);

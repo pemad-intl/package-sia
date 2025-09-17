@@ -19,27 +19,21 @@ class EventStudentController extends Controller
     public function index(Request $request)
     {
         $boardingEventStdn = BoardingStudentsEvent::with(['event', 'teacher', 'supervisor'])
-        ->whereHas('teacher', function ($query) {
-            $query->where('grade_id', userGrades()); 
-        })
         ->whereNull('deleted_at')
         ->paginate(10);
         
         $students = Student::with('user')
-        ->where('grade_id', userGrades())
         ->whereNull('deleted_at')->get();
 
-        $events = BoardingReferenceEvent::where('grade_id', userGrades())->whereNull('deleted_at')->get();
+        $events = BoardingReferenceEvent::whereNull('deleted_at')->get();
         $acdmcClass = AcademicClassroom::whereNull('deleted_at')->get();
         
         $employeeTeacher = Employee::with('user')
-        ->where('grade_id', userGrades())
         ->whereHas('contract.position.position', function ($q) {
             $q->where('type', PositionTypeEnum::GURU->value);
         })->get();
 
         $employeeSupervisor = Employee::with('user')
-        ->where('grade_id', userGrades())
         ->whereHas('contract.position.position', function ($q) {
             $q->where('type', PositionTypeEnum::PENGURUS->value);
         })->get();

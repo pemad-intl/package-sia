@@ -14,15 +14,14 @@ class EventReferenceController extends Controller
 {
     public function index(Request $request)
     {
-        $boardingEvent = BoardingReferenceEvent::where('grade_id', userGrades())->whereNull('deleted_at')->paginate(10);
+        $boardingEvent = BoardingReferenceEvent::whereNull('deleted_at')->paginate(10);
         
         return view('boarding::event.index', compact('boardingEvent'));
     }
 
     public function store(Request $request)
     {
-        $data = array_merge(
-            Arr::only($request->all(), [
+        $data = Arr::only($request->all(), [
                 'name', 
                 'type', 
                 'start_date', 
@@ -30,11 +29,7 @@ class EventReferenceController extends Controller
                 'in', 
                 'out', 
                 'type_participant'
-            ]),
-            [
-                'grade_id' => userGrades()
-            ]
-        );
+        ]);
 
         $boardEvent = BoardingReferenceEvent::create($data);
         
@@ -70,8 +65,7 @@ class EventReferenceController extends Controller
 
     public function update(BoardingReferenceEvent $event_reference, Request $request)
     {
-        $data = array_merge(
-            Arr::only($request->all(), [
+        $data = Arr::only($request->all(), [
                 'name',
                 'type',
                 'start_date',
@@ -79,11 +73,7 @@ class EventReferenceController extends Controller
                 'in',
                 'out',
                 'type_participant',
-            ]),
-            [
-                'grade_id' => userGrades()
-            ]
-        );
+            ]);
 
         
         $event = $event_reference->update($data);

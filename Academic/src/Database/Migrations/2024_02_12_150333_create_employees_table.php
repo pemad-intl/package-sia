@@ -27,7 +27,6 @@ return new class extends Migration
             $table->string('group')->nullable();
             $table->string('sk_number')->nullable();
             $table->date('entered_at')->nullable();
-            $table->foreignId('grade_id')->constrained('ref_grades')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
             $table->unsignedInteger('deleted_by')->nullable();
@@ -136,7 +135,6 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreignId('grade_id')->constrained('ref_grades')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('empl_id')->references('id')->on('empls')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('ctg_id')->references('id')->on('cmp_vacation_ctgs')->onUpdate('cascade')->onDelete('cascade');
         });
@@ -150,7 +148,6 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreignId('grade_id')->constrained('ref_grades')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('quota_id')->references('id')->on('empl_vacation_quotas')->onUpdate('cascade')->onDelete('cascade');
         });
 
@@ -185,7 +182,6 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreignId('grade_id')->constrained('ref_grades')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('empl_id')->references('id')->on('empls')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('scheduled_by')->references('id')->on('empls')->onUpdate('cascade')->onDelete('cascade');
         });
@@ -204,7 +200,6 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreignId('grade_id')->constrained('ref_grades')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('ctg_id')->references('id')->on('cmp_outwork_ctgs')->onUpdate('cascade')->onDelete('cascade');
         });
 

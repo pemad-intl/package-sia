@@ -20,8 +20,7 @@ class CurriculaController extends Controller
 
         $trashed = $request->get('trash');
 
-        $curriculas = SchoolCurricula::where('grade_id', userGrades())
-        ->where('name', 'like', '%'.$request->get('search').'%')->when($trashed, function($query, $trashed) {
+        $curriculas = SchoolCurricula::where('name', 'like', '%'.$request->get('search').'%')->when($trashed, function($query, $trashed) {
             return $query->onlyTrashed();
         })->orderByDesc('id')->paginate($request->get('limit', 10));
 
@@ -37,10 +36,7 @@ class CurriculaController extends Controller
     {
         $this->authorize('store', SchoolCurricula::class);
 
-        $curricula = new SchoolCurricula(array_merge($request->only('kd', 'name', 'year'),
-        [
-            'grade_id' => userGrades()
-        ]));
+        $curricula = new SchoolCurricula($request->only('kd', 'name', 'year'));
 
         if($curricula->save()){
             Auth::user()->log(
@@ -83,9 +79,7 @@ class CurriculaController extends Controller
         $this->authorize('update', SchoolCurricula::class);
         if($curricula->trashed()) abort(404);
 
-        if($curricula->update(array_merge($request->only('kd', 'name', 'year'), [
-            'grade_id' => userGrades()
-        ]))){
+        if($curricula->update($request->only('kd', 'name', 'year'))){
             Auth::user()->log(
                 ' Kurikulum '.$curricula->name.' telah diperbarui '.
                 ' <strong>[ID: ' . $curricula->id . ']</strong>',

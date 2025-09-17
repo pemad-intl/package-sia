@@ -22,12 +22,11 @@ class RoomController extends Controller
     	$trashed = $request->get('trash', 0);
 
     	$rooms = SchoolBuildingRoom::with('building')
-        ->where('grade_id', userGrades())
         ->where('name', 'like', '%'.$request->get('search').'%')->when($trashed, function($query, $trashed) {
             return $query->onlyTrashed();
         })->paginate($request->get('limit', 10));
 
-        $buildings = SchoolBuilding::where('grade_id', userGrades())->whereNull('deleted_at')->get();
+        $buildings = SchoolBuilding::whereNull('deleted_at')->get();
 
         return view('administration::facility.rooms.index', compact('user','rooms','buildings'));
     }
@@ -41,7 +40,6 @@ class RoomController extends Controller
             'kd' => $request->input('kd'),
             'name' => $request->input('name'),
             'capacity' => $request->input('capacity'),
-            'grade_id' => userGrades()
         ]);
 
         if($room->save()){
@@ -67,7 +65,6 @@ class RoomController extends Controller
             'kd' => $request->input('kd'),
             'name' => $request->input('name'),
             'capacity' => $request->input('capacity'),
-            'grade_id' => userGrades()
         ])){
             Auth::user()->log(
                 ' Ruangan bernama '.$room->name.' telah diperbarui '.

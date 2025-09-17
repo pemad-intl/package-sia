@@ -25,9 +25,6 @@ class ManageController extends Controller
 	//	$employee = $user->employe;
 
 		$leaves = BoardingStudentsLeave::with('student.user')
-			->whereHas('student', function ($query) {
-				$query->where('grade_id', userGrades());
-			})
 			->whenOnlyPending($request->get('pending'))
 			->search($request->get('search'))
 			->latest()

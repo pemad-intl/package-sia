@@ -18,7 +18,6 @@ class CreateAcademicsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->integer('year');
-            $table->foreignId('grade_id')->constrained('ref_grades')->onUpdate('cascade')->onDelete('cascade');
 
             $table->softDeletes();
             $table->timestamps();
@@ -80,7 +79,6 @@ class CreateAcademicsTable extends Migration
         Schema::create('acdmc_majors', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('semester_id');
-            $table->foreignId('grade_id')->constrained('ref_grades')->onUpdate('cascade')->onDelete('cascade');
             $table->string('name');
             $table->softDeletes();
             $table->timestamps();
@@ -91,7 +89,6 @@ class CreateAcademicsTable extends Migration
         Schema::create('acdmc_superiors', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('semester_id');
-            $table->foreignId('grade_id')->constrained('ref_grades')->onUpdate('cascade')->onDelete('cascade');
             $table->string('name');
             $table->softDeletes();
             $table->timestamps();
@@ -135,7 +132,6 @@ class CreateAcademicsTable extends Migration
         Schema::create('acdmc_subject_ctgs', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->string('name')->nullable();
-            $table->foreignId('grade_id')->constrained('ref_grades')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -232,7 +228,6 @@ class CreateAcademicsTable extends Migration
 
         Schema::create('acdmc_case_ctgs', function (Blueprint $table) {
             $table->smallIncrements('id');
-            $table->foreignId('grade_id')->constrained('ref_grades')->onUpdate('cascade')->onDelete('cascade');
             $table->string('name');
             $table->softDeletes();
             $table->timestamps();
@@ -250,7 +245,6 @@ class CreateAcademicsTable extends Migration
 
         Schema::create('acdmc_counseling_ctgs', function (Blueprint $table) {
             $table->smallIncrements('id');
-            $table->foreignId('grade_id')->constrained('ref_grades')->onUpdate('cascade')->onDelete('cascade');
             $table->string('name');
             $table->softDeletes();
             $table->timestamps();

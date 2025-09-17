@@ -24,8 +24,7 @@ class BoardingStudents extends Model
         'student_id',
         'building_id',
         'empl_id',
-        'room_id',
-        'grade_id'
+        'room_id'
     ];
 
     /**

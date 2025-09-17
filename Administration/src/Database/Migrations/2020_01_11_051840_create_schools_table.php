@@ -11,8 +11,6 @@ class CreateSchoolsTable extends Migration
         Schema::create('sch_buildings', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->string('kd')->unique();
-            $table->unsignedSmallInteger('grade_id');
-            $table->foreign('grade_id')->references('id')->on('ref_grades')->onUpdate('cascade')->onDelete('cascade');
             $table->string('name')->nullable();
             $table->string('address')->nullable();
             $table->string('rt')->nullable();
@@ -32,7 +30,6 @@ class CreateSchoolsTable extends Migration
         Schema::create('sch_building_rooms', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->smallInteger('building_id');
-            $table->smallInteger('grade_id');
             $table->string('kd');
             $table->string('name');
             $table->smallInteger('capacity')->nullable();
@@ -41,7 +38,6 @@ class CreateSchoolsTable extends Migration
 
             $table->unique(['building_id', 'kd']);
             $table->foreign('building_id')->references('id')->on('sch_buildings')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('grade_id')->references('id')->on('ref_grades')->onUpdate('cascade')->onDelete('cascade');
         });
 
         Schema::create('sch_building_room_asset_ctgs', function (Blueprint $table) {
@@ -75,8 +71,6 @@ class CreateSchoolsTable extends Migration
         Schema::create('sch_curriculas', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->string('kd')->unique();
-            $table->unsignedSmallInteger('grade_id');
-            $table->foreign('grade_id')->references('id')->on('ref_grades')->onUpdate('cascade')->onDelete('cascade');
             $table->string('name');
             $table->year('year')->nullable();
             $table->softDeletes();

@@ -456,7 +456,6 @@ document.addEventListener("DOMContentLoaded", function() {
     //         let payload = { status: status, education: education };
 
     //         if(modalId === 'applyClass') {
-    //             payload.grade_id = formData.get('class_id');
     //             payload.class_id = formData.get('classroom_id');
     //             payload.semester_id = formData.get('semester_id');
     //             payload.batch_id = formData.get('batch_id');

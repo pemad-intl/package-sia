@@ -13,10 +13,8 @@ class CreateBoardingTable extends Migration
             $table->smallIncrements('id');
             $table->unsignedSmallInteger('empl_id');
             $table->unsignedSmallInteger('building_id');
-            $table->unsignedSmallInteger('grade_id');
             $table->bigInteger('student_id');
             $table->bigInteger('room_id');
-            $table->foreign('grade_id')->references('id')->on('ref_grades')->onUpdate('cascade')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
 
@@ -31,14 +29,12 @@ class CreateBoardingTable extends Migration
             $table->increments('id');
             $table->unsignedSmallInteger('student_id');
             $table->unsignedTinyInteger('ctg_id');
-            $table->unsignedSmallInteger('grade_id');
             $table->jsonb('dates')->nullable();
             $table->text('description')->nullable();
             $table->string('attachment')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('grade_id')->references('id')->on('ref_grades')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('student_id')->references('id')->on('stdnts')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('ctg_id')->references('id')->on('cmp_leave_stdnts_ctgs')->onUpdate('cascade')->onDelete('cascade');
         });
@@ -48,14 +44,12 @@ class CreateBoardingTable extends Migration
         Schema::create('sch_boarding_event', function(Blueprint $table){
             $table->smallIncrements('id');
             $table->smallInteger('type');
-            $table->unsignedSmallInteger('grade_id');
             $table->string('name');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->time('in')->nullable();
             $table->time('out')->nullable();
             $table->smallInteger('type_participant');
-            $table->foreign('grade_id')->references('id')->on('ref_grades')->onUpdate('cascade')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

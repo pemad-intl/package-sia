@@ -22,8 +22,7 @@ class Student extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'user_id', 'nis', 'nisn', 'nik', 'generation_id', 'entered_at', 'avatar', 'graduated_at', 'graduate_avatar',
-        'grade_id'
+        'user_id', 'nis', 'nisn', 'nik', 'generation_id', 'entered_at', 'avatar', 'graduated_at', 'graduate_avatar'
     ];
 
     /**

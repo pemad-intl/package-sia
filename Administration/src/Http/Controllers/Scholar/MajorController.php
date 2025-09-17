@@ -25,7 +25,6 @@ class MajorController extends Controller
         $acsems = AcademicSemester::openedByDesc()->get();
 
         $majors = AcademicMajor::with('classrooms')->where('name', 'like', '%'.$request->get('search').'%')
-        ->where('grade_id', userGrades())
         ->when($trashed, function($query, $trashed) {
             return $query->onlyTrashed();
         })->where('semester_id', $request->get('academic', $acsems->first()->id))->orderByDesc('id')->paginate($request->get('limit', 10));
@@ -49,7 +48,6 @@ class MajorController extends Controller
         $this->authorize('store', AcademicMajor::class);
 
         $major = new AcademicMajor($request->only('name', 'semester_id'));
-        $major->grade_id = userGrades();
 
         if($major->save()){
             Auth::user()->log(
@@ -72,10 +70,9 @@ class MajorController extends Controller
     {
         $this->authorize('update', AcademicMajor::class);
 
-        if($major->update(array_merge(
+        if($major->update(
             $request->only('name'),
-            ['grade_id' => userGrades()]
-        ))){
+        )){
             Auth::user()->log(
                 ' Jurusan bernama '.$major->name.' telah diperbarui '.
                 ' <strong>[ID: ' . $major->id . ']</strong>',

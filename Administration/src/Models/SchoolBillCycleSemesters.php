@@ -19,7 +19,7 @@ class SchoolBillCycleSemesters extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'semester_id', 'grade_id', 'name'
+        'semester_id', 'name'
     ];
 
     /**

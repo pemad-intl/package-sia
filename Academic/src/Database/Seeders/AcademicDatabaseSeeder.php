@@ -30,7 +30,6 @@ class AcademicDatabaseSeeder extends Seeder
                 $acdmcId = count($acdmcs) + 1;
 
                 $acdmcs[] = [
-                    'grade_id' => $grade,
                     'name' => (string) ($i.'/'.($i + 1)),
                     'year' => $i
                 ];
@@ -129,7 +128,6 @@ class AcademicDatabaseSeeder extends Seeder
 
                 $category = AcademicSubjectCategory::create([
                     'name' => $categories,
-                    'grade_id' => $gradeId
                 ]);
 
                 // Loop tiap level

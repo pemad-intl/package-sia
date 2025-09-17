@@ -23,7 +23,7 @@ class AcademicController extends Controller
 
         $academics = Academic::with(['semesters' => function ($semester) {
             $semester->where('open', 1);
-        }])->where('grade_id', userGrades())        
+        }])        
         ->withCount('semesters')->where('name', 'like', '%'.$request->get('search').'%')->when($trashed, function($query, $trashed) {
             return $query->onlyTrashed();
         })->orderByDesc('id')->paginate($request->get('limit', 10));

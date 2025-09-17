@@ -25,19 +25,12 @@ class CaseDescriptionController extends Controller
                             ->when($ctg, function ($q) use ($ctg) {
                                 return $q->where('ctg_id', $ctg);
                             })
-                            ->whereHas('category', function($category){
-                                return $category->where('grade_id', userGrades());
-                            })
                             ->where('name', 'like', '%'.$request->get('search').'%')
                             ->paginate($request->get('limit', 10));
 
-        $descriptions_count = AcademicCaseCategoryDescription::with('category')
-        ->whereHas('category', function($category){
-            return $category->where('grade_id', userGrades());
-        })
-        ->count();
+        $descriptions_count = AcademicCaseCategoryDescription::with('category')->count();
 
-        $categories = AcademicCaseCategory::where('grade_id', userGrades())->whereNull('deleted_at')->get();
+        $categories = AcademicCaseCategory::whereNull('deleted_at')->get();
 
         return view('counseling::manage.cases.descriptions.index', compact('categories', 'descriptions', 'descriptions_count'));
     }
@@ -72,7 +65,7 @@ class CaseDescriptionController extends Controller
     {
         $this->authorize('update', AcademicCaseCategoryDescription::class);
 
-        $categories = AcademicCaseCategory::where('grade_id', userGrades())->whereNull('deleted_at')->get();
+        $categories = AcademicCaseCategory::whereNull('deleted_at')->get();
 
         return view('counseling::manage.cases.descriptions.edit', compact('description', 'categories'));
     }

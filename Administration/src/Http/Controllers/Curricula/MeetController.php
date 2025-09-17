@@ -28,12 +28,8 @@ class MeetController extends Controller
         $trashed = $request->get('trash');
 
         $acsems = AcademicSemester::openedByDesc()->get();
-        $grades = GradeLevel::where('grade_id', userGrades())->pluck('id');
 
-        $meets = AcademicSubjectMeet::withCount('plans')->whereHas('classroom', function ($classroom) use ($request, $grades) {
-            return $classroom->where('name', 'like', '%'.$request->get('search').'%')
-            ->whereIn('level_id', $grades);
-        })->when($trashed, function($query, $trashed) {
+        $meets = AcademicSubjectMeet::withCount('plans')->when($trashed, function($query, $trashed) {
             return $query->onlyTrashed();
         })->where('semester_id', $request->get('academic', $acsems->first()->id))->paginate($request->get('limit', 10));
 
@@ -55,18 +51,12 @@ class MeetController extends Controller
     {
         $this->authorize('access', AcademicSemester::class);
 
-        $grades = GradeLevel::where('grade_id', auth()->user()->employee->grade_id)->pluck('id');
-        $acsems = AcademicSemester::with(['classrooms' => function($classroom) use ($grades){
-            $classroom->whereIn('level_id', $grades);
-        }])->openedByDesc()->get();
+        $acsems = AcademicSemester::with(['classrooms'])->openedByDesc()->get();
 
         $acsem = $acsems->firstWhere('id', $request->get('academic', $acsems->first()->id))->load(['majors', 'superiors', 
-        'subjects' => function($query) use ($grades) {
-            $query->whereIn('level_id', $grades); 
-         }, 'classrooms']);
+        'subjects']);
 
         $teachers = Employee::whereHas('position.position', fn($p) => $p->where('type', PositionTypeEnum::GURU))
-        ->where('grade_id', auth()->user()->employee->grade_id)
         ->whereNull('deleted_at')->get();
 
         return view('administration::curriculas.meets.create', compact('acsems', 'acsem', 'teachers'));
@@ -109,15 +99,11 @@ class MeetController extends Controller
     public function edit(AcademicSubjectMeet $meet, Request $request)
     {
         $this->authorize('update', AcademicSemester::class);
-        $grades = GradeLevel::where('grade_id', auth()->user()->employee->grade_id)->pluck('id');
 
-        $acsem = $meet->semester->load(['subjects' => function($query) use ($grades) {
-            $query->whereIn('level_id', $grades); 
-        }
-        , 'classrooms']);
+        $acsem = $meet->semester->load(['subjects', 'classrooms']);
 
         $teachers = Employee::whereHas('position.position', fn($p) => $p->where('type', PositionTypeEnum::GURU))
-        ->where('grade_id', auth()->user()->employee->grade_id)->whereNull('deleted_at')->get();
+        ->whereNull('deleted_at')->get();
 
         return view('administration::curriculas.meets.edit', compact('meet', 'acsem', 'teachers'));
     }

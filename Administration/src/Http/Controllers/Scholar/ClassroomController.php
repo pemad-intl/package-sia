@@ -29,12 +29,10 @@ class ClassroomController extends Controller
         $trashed = $request->get('trash');
 
         $acsems = AcademicSemester::openedByDesc()->get();
-        $gradesLevels = GradeLevel::where('grade_id', userGrades())->pluck('id');
       
         $classrooms = AcademicClassroom::withCount('stsems')->where('name', 'like', '%'.$request->get('search').'%')->when($trashed, function($query, $trashed) {
             return $query->onlyTrashed();
         })->where('semester_id', $request->get('academic', $acsems->first()->id))
-        ->whereIn('level_id', $gradesLevels)
         ->orderBy('level_id')->orderBy('name')->paginate($request->get('limit', 10));
 
         $acsem = $acsems->firstWhere('id', $request->get('academic', $acsems->first()->id));
@@ -58,12 +56,12 @@ class ClassroomController extends Controller
         $acsems = AcademicSemester::openedByDesc()->get();
         $acsem = $acsems->firstWhere('id', $request->get('academic', $acsems->first()->id))->load('majors', 'superiors');
 
-        $rooms = SchoolBuildingRoom::where('grade_id', userGrades())->whereNull('deleted_at')->get();
+        $rooms = SchoolBuildingRoom::whereNull('deleted_at')->get();
 
         $supervisors = Employee::whereHas('contract.position', function ($query) {
             $query->where('position_id', PositionTypeEnum::GURU)
           ->orWhere('position_id', PositionTypeEnum::HUMAS);
-        })->where('grade_id', userGrades())->get();
+        })->get();
 
         return view('administration::scholar.classrooms.create', compact('acsems', 'acsem', 'rooms', 'supervisors'));
     }
@@ -101,11 +99,11 @@ class ClassroomController extends Controller
         $acsems = AcademicSemester::openedByDesc()->get();
         $acsem = $acsems->firstWhere('id', $classroom->semester_id)->load('majors', 'superiors');
 
-        $rooms = SchoolBuildingRoom::where('grade_id', userGrades())->whereNull('deleted_at')->get();
+        $rooms = SchoolBuildingRoom::whereNull('deleted_at')->get();
 
-        $supervisors = Employee::where('grade_id', userGrades())->whereHas('contract.position', function ($query) {
+        $supervisors = Employee::whereHas('contract.position', function ($query) {
             $query->where('position_id', PositionTypeEnum::GURU);
-        })->where('grade_id', userGrades())->get();
+        })->get();
 
         return view('administration::scholar.classrooms.edit', compact('acsems', 'acsem', 'rooms', 'supervisors', 'classroom'));
     }

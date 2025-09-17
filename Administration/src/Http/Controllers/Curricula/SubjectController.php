@@ -26,18 +26,17 @@ class SubjectController extends Controller
         $trashed = $request->get('trash');
 
         $acsems = AcademicSemester::openedByDesc()->get();
-        $gradesLevels = GradeLevel::where('grade_id', userGrades())->pluck('id');
 
         $subjects = AcademicSubject::where('name', 'like', '%'.$request->get('search').'%')->when($trashed, function($query, $trashed) {
             return $query->onlyTrashed();
         })->where('semester_id', $request->get('academic', $acsems->first()->id))
-        ->whereIn('level_id', $gradesLevels)->paginate($request->get('limit', 10));
+        ->paginate($request->get('limit', 10));
 
         $acsem = $acsems->firstWhere('id', $request->get('academic', $acsems->first()->id));
 
         if ($acsem) {
             $subjects_count = AcademicSubject::where('semester_id', $request->get('academic', $acsems->first()->id))
-            ->whereIn('level_id', $gradesLevels)->count();
+            ->count();
 
             return view('administration::curriculas.subjects.index', compact('acsems', 'acsem', 'subjects', 'subjects_count'));
         }
@@ -55,9 +54,8 @@ class SubjectController extends Controller
         $acsems = AcademicSemester::openedByDesc()->get();
         $acsem = $acsems->firstWhere('id', $request->get('academic', $acsems->first()->id));
  
-        $levels = GradeLevel::where('grade_id', userGrades())->get();
-        $categories = AcademicSubjectCategory::where('grade_id', userGrades())->get();
 
+        $categories = AcademicSubjectCategory::all();
         return view('administration::curriculas.subjects.create', compact('acsems', 'acsem', 'levels', 'categories'));
     }
 
@@ -89,7 +87,7 @@ class SubjectController extends Controller
     public function edit(AcademicSubject $subject, Request $request)
     {
         $this->authorize('show', AcademicSubject::class);
-        $levels = GradeLevel::where('grade_id', userGrades())->get();
+        $levels = GradeLevel::get();
         $categories = AcademicSubjectCategory::all();
 
         return view('administration::curriculas.subjects.edit', compact('subject', 'levels', 'categories'));

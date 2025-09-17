@@ -10,8 +10,6 @@ class CreateBillStudentTable extends Migration
     {
         Schema::create('sch_bill_batchs', function(Blueprint $table){
             $table->smallIncrements('id');
-            $table->unsignedSmallInteger('grade_id');
-            $table->foreign('grade_id')->references('id')->on('ref_grades')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('semester_id');
             $table->string('name');
             $table->softDeletes();

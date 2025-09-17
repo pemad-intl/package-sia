@@ -153,7 +153,7 @@ class ExportScheduleTeacher implements FromView, WithEvents, ShouldAutoSize, Wit
                     ],
                 ]);
 
-                $employeess = Employee::where('grade_id', userGrades())->with('user')
+                $employeess = Employee::with('user')
                     ->whereHas('position.position', fn($q) => $q->where('type', PositionTypeEnum::GURU))
                     ->get();
 

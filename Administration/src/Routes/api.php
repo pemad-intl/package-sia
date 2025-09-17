@@ -62,7 +62,6 @@ Route::get('/batches', function () {
     $acdmcId = AcademicSemester::find($semesterId);
 
     return SchoolBillCycleSemesters::where('semester_id', $acdmcId->id)
-        ->where('grade_id', userGrades())
         ->get(['id','name']) 
         ->map(function ($item) {
             return [

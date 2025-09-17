@@ -21,7 +21,7 @@ class SubjectCategoryController extends Controller
 
         $trashed = $request->get('trash');
 
-        $categories = AcademicSubjectCategory::withCount('subjects')->where('grade_id', userGrades())
+        $categories = AcademicSubjectCategory::withCount('subjects')
         ->where('name', 'like', '%'.$request->get('search').'%')->when($trashed, function($query, $trashed) {
             return $query->onlyTrashed();
         })->paginate($request->get('limit', 10));
@@ -48,9 +48,7 @@ class SubjectCategoryController extends Controller
     {
         $this->authorize('store', AcademicSubjectCategory::class);
 
-        $category = new AcademicSubjectCategory($request->only('name') + [
-            'grade_id' => auth()->user()?->employee?->grade_id ?? null,
-        ]);
+        $category = new AcademicSubjectCategory($request->only('name'));
         
         if($category->save()){
             Auth::user()->log(
@@ -84,7 +82,7 @@ class SubjectCategoryController extends Controller
         $this->authorize('update', AcademicSubjectCategory::class);
 
         if ($subject_category->update(
-            $request->only('name') + ['grade_id' => auth()->user()?->employee?->grade_id ?? null]
+            $request->only('name')
         )){
             Auth::user()->log(
                 ' Kategori mapel bernama '.$subject_category->name.' telah diperbarui '.

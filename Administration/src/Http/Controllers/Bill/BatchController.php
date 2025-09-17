@@ -23,9 +23,9 @@ class BatchController extends Controller
 
     	$billsBatch = SchoolBillCycleSemesters::where('name', 'like', '%'.$request->get('search').'%')->when($trashed, function($query, $trashed) {
             return $query->onlyTrashed();
-        })->where('grade_id', userGrades())->paginate($request->get('limit', 10));
+        })->paginate($request->get('limit', 10));
 
-        $billBatchCount = SchoolBillCycleSemesters::whereNull('deleted_at')->where('grade_id', userGrades())->count();
+        $billBatchCount = SchoolBillCycleSemesters::whereNull('deleted_at')->count();
 
         $editBillBatch = null;
         if ($request->filled('edit')) {
@@ -42,7 +42,6 @@ class BatchController extends Controller
         $this->authorize('store', SchoolBillCycleSemesters::class);
 
         $batchs = new SchoolBillCycleSemesters([
-            'grade_id' => userGrades(),
             'name' => $request->input('name'),
             'semester_id' => $request->input('semester_id')
         ]);
@@ -70,7 +69,6 @@ class BatchController extends Controller
         if ($batch->trashed()) abort(404);
 
         if($batch->update([
-            'grade_id' => userGrades(),
             'name' => $request->input('name'),
             'semester_id' => $request->input('semester_id')
         ])){

@@ -27,8 +27,7 @@ class BoardingReferenceEvent extends Model
         'end_date',
         'in',
         'out',
-        'type_participant',
-        'grade_id'
+        'type_participant'
     ];
 
     /**

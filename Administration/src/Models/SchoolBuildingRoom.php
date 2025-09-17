@@ -18,7 +18,7 @@ class SchoolBuildingRoom extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'kd', 'name', 'capacity','building_id', 'grade_id'
+        'kd', 'name', 'capacity','building_id'
     ];
 
     /**

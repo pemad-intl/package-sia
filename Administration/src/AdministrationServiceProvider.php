@@ -5,6 +5,8 @@ namespace Digipemad\Sia\Administration;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Facades\Blade;
+use Modules\Account\Models\User;
+use Digipemad\Sia\Administration\Models\Traits\Account\UserTrait as AdministrationTrait;
 
 class AdministrationServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,11 @@ class AdministrationServiceProvider extends ServiceProvider
     {
         $this->app->register(AuthServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
+        
+        User::mixin(new class {
+            use AdministrationTrait;
+        });
+
         $this->loadDynamicRelationships();
         $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
 

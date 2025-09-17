@@ -18,7 +18,7 @@ class AcademicCaseCategory extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'name', 'grade_id'
+        'name'
     ];
 
     /**

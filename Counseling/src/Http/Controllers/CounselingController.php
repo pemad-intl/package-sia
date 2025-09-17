@@ -29,10 +29,7 @@ class CounselingController extends Controller
                              return $student->whereNameLike($request->get('search'));
                          });
         })->whereHas('semester', function ($q) {
-            $q->where('semester_id', $this->acsem->id)
-            ->whereHas('student', function ($q2) {
-                $q2->where('grade_id', userGrades()); // filter ke grade_id
-            });
+            $q->where('semester_id', $this->acsem->id);
         })->paginate($request->get('limit', 10));
 
         $counselings_count = StudentSemesterCounseling::whereHas('semester', function ($semester) {
@@ -50,11 +47,7 @@ class CounselingController extends Controller
         $this->authorize('store', StudentSemesterCounseling::class);
         $acsem = $this->acsem;
 
-        $grades = GradeLevel::where('grade_id', userGrades())->pluck('id');
         $classrooms = StudentSemester::with('classroom')
-        ->whereHas('classroom', function ($classroom) use ($request, $grades) {
-            return $classroom->whereIn('level_id', $grades);
-        })
         ->where('semester_id', $acsem->id)->get()->groupBy('classroom.name');
         $categories = AcademicCounselingCategory::all();
 

@@ -44,8 +44,8 @@ class SubmissionController extends Controller
 	public function create(Request $request)
 	{
 		$employee = $request->user()->student;
-		$students = Student::where('grade_id', userGrades())->with('user')->whereNull('deleted_at')->get();
-		$categories = CompanyStudentLeaveCategory::with('children')->where('grade_id', userGrades())->whereNull('parent_id')->get();
+		$students = Student::with('user')->whereNull('deleted_at')->get();
+		$categories = CompanyStudentLeaveCategory::with('children')->whereNull('parent_id')->get();
 
 		return view('boarding::leave.submission.create', compact('employee', 'categories', 'students'));
 	}

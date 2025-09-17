@@ -59,8 +59,7 @@ trait StudentTrait
             'nis' => $data['nis'],
             'nisn' => $data['nisn'],
             'generation_id' => $data['acdmc_id'],
-            'entered_at' => $data['entered_at'] ? date('Y-m-d', strtotime($data['entered_at'])) : null,
-            'grade_id' => $data['grade_id']
+            'entered_at' => $data['entered_at'] ? date('Y-m-d', strtotime($data['entered_at'])) : null
         ]);
 
         $student->save();

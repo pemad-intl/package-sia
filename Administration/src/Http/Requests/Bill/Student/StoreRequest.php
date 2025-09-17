@@ -69,7 +69,7 @@ class StoreRequest extends FormRequest
         ->all();
 
         if(!empty($education)){
-            $grades = GradeLevel::where('grade_id', $education)->pluck('id');
+            $grades = GradeLevel::where('grade_id', config('school.grade'))->pluck('id');
         } 
 
         if($this->input('status') == 1){

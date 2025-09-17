@@ -18,7 +18,7 @@ class AcademicMajor extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'semester_id', 'name', 'grade_id'
+        'semester_id', 'name'
     ];
 
     /**

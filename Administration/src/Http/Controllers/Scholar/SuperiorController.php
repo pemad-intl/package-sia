@@ -25,7 +25,7 @@ class SuperiorController extends Controller
 
         $acsems = AcademicSemester::openedByDesc()->get();
 
-        $superiors = AcademicSuperior::with('classrooms')->where('grade_id', userGrades())->where('name', 'like', '%'.$request->get('search').'%')->when($trashed, function($query, $trashed) {
+        $superiors = AcademicSuperior::with('classrooms')->where('name', 'like', '%'.$request->get('search').'%')->when($trashed, function($query, $trashed) {
             return $query->onlyTrashed();
         })->where('semester_id', $request->get('academic', $acsems->first()->id))->orderByDesc('id')->paginate($request->get('limit', 10));
 
@@ -48,9 +48,7 @@ class SuperiorController extends Controller
     {
         $this->authorize('store', AcademicSuperior::class);
 
-        $superior = new AcademicSuperior(array_merge($request->only('name', 'semester_id'), 
-            ['grade_id' => userGrades()]
-        ));
+        $superior = new AcademicSuperior($request->only(['name', 'semester_id']));
 
         if($superior->save()){
             Auth::user()->log(
@@ -73,7 +71,7 @@ class SuperiorController extends Controller
     {
         $this->authorize('update', AcademicSuperior::class);
 
-        if($superior->update(array_merge($request->only('name'), ['grade_id' => userGrades()]))){
+        if($superior->update($request->only('name'))){
              Auth::user()->log(
                 ' Unggulan bernama '.$superior->name.' telah diperbarui '.
                 ' <strong>[ID: ' . $superior->id . ']</strong>',

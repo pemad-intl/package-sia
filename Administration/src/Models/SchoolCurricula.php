@@ -18,7 +18,7 @@ class SchoolCurricula extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'kd', 'name', 'grade_id', 'year'
+        'kd', 'name', 'year'
     ];
 
     /**
