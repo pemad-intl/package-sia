@@ -5,7 +5,6 @@ namespace Digipemad\Sia\Academic\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Digipemad\Sia\Boarding\Models\BoardingStudentsLeave;
-
 use Digipemad\Sia\Academic\Models\Traits\StudentTrait;
 use Digipemad\Sia\HRMS\Models\EmployeePosition;
 

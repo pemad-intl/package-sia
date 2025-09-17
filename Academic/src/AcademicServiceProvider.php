@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Facades\Blade;
 use Modules\Account\Models\User;
+use Digipemad\Sia\Academic\Models\Student;
 use Digipemad\Sia\Academic\Models\Traits\Account\UserTrait as UserAcademicTrait;
 
 class AcademicServiceProvider extends ServiceProvider
@@ -25,9 +26,9 @@ class AcademicServiceProvider extends ServiceProvider
         $this->app->register(AuthServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
         
-        User::mixin(new class {
-            use UserAcademicTrait;
-        });
+        // User::mixin(new class {
+        //     use UserAcademicTrait;
+        // });
 
         $this->loadDynamicRelationships();
         $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
@@ -49,6 +50,10 @@ class AcademicServiceProvider extends ServiceProvider
 
     public function loadDynamicRelationships()
     {
+        User::resolveRelationUsing('student', function (User $user) {
+            return $user->hasOne(Student::class, 'user_id');
+        });
+
         // User::resolveRelationUsing('employee', function ($user) {
         //     return $user->hasOne(Employee::class, 'user_id')->withDefault();
         // });

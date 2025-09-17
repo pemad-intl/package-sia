@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Facades\Blade;
 use Modules\Account\Models\User;
+use Digipemad\Sia\Administration\Models\School;
 use Digipemad\Sia\Administration\Models\Traits\Account\UserTrait as AdministrationTrait;
 
 class AdministrationServiceProvider extends ServiceProvider
@@ -25,9 +26,9 @@ class AdministrationServiceProvider extends ServiceProvider
         $this->app->register(AuthServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
         
-        User::mixin(new class {
-            use AdministrationTrait;
-        });
+        // User::mixin(new class {
+        //     use AdministrationTrait;
+        // });
 
         $this->loadDynamicRelationships();
         $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
@@ -49,6 +50,11 @@ class AdministrationServiceProvider extends ServiceProvider
 
     public function loadDynamicRelationships()
     {
+
+        // User::resolveRelationUsing('student', function (User $user) {
+        //     return $user->hasMany(School::class, 'sch_users', 'user_id', 'sch_id');
+        // });
+
         // User::resolveRelationUsing('employee', function ($user) {
         //     return $user->hasOne(Employee::class, 'user_id')->withDefault();
         // });

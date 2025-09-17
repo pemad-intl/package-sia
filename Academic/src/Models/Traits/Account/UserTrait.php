@@ -2,6 +2,7 @@
 
 namespace Digipemad\Sia\Academic\Models\Traits\Account;
 
+use Modules\HRMS\Models\Employee;
 trait UserTrait
 {
     /**
@@ -23,7 +24,7 @@ trait UserTrait
      * This hasOne employee
      */
     public function employee () {
-        return $this->hasOne(\Digipemad\Sia\HRMS\Models\Employee::class, 'user_id');
+        return $this->hasOne(Employee::class, 'user_id');
     }
 
     /**
