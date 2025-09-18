@@ -18,9 +18,12 @@ class SiaMigrateCommand extends Command
         foreach ($modules as $modulePath) {
             $migrationsPath = $modulePath . '/src/Database/Migrations';
             if (File::exists($migrationsPath)) {
+                $relativePath = str_replace(base_path() . DIRECTORY_SEPARATOR, '', $migrationsPath);
+                $relativePath = str_replace('\\', '/', $relativePath); // <-- FIX
+                
                 $this->info("Migrating: $modulePath");
                 $this->call('migrate', [
-                    '--path' => str_replace(base_path().'/', '', $migrationsPath),
+                    '--path' => $relativePath,
                     '--force' => $this->option('force')
                 ]);
             }
