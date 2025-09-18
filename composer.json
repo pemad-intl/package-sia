@@ -8,7 +8,8 @@
             "Digipemad\\Sia\\Administration\\": "Administration/src",
             "Digipemad\\Sia\\Boarding\\": "Boarding/src",
             "Digipemad\\Sia\\Counseling\\": "Counseling/src",
-            "Digipemad\\Sia\\Teacher\\": "Teacher/src"
+            "Digipemad\\Sia\\Teacher\\": "Teacher/src",
+            "Digipemad\\Sia\\Console\\": "Console/"
         }
     },
     "extra": {
@@ -18,7 +19,8 @@
                 "Digipemad\\Sia\\Administration\\AdministrationServiceProvider",
                 "Digipemad\\Sia\\Boarding\\BoardingServiceProvider",
                 "Digipemad\\Sia\\Counseling\\CounselingServiceProvider",
-                "Digipemad\\Sia\\Teacher\\TeacherServiceProvider"
+                "Digipemad\\Sia\\Teacher\\TeacherServiceProvider",
+                "Digipemad\\Sia\\Console\\ConsoleServiceProvider"
             ],
             "aliases": {
                 "Academic": "Digipemad\\Sia\\Academic\\Facades\\Academic",
