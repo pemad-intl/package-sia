@@ -9,7 +9,7 @@
             "Digipemad\\Sia\\Boarding\\": "Boarding/src",
             "Digipemad\\Sia\\Counseling\\": "Counseling/src",
             "Digipemad\\Sia\\Teacher\\": "Teacher/src",
-            "Digipemad\\Sia\\Console\\": "Console/"
+            "Digipemad\\Sia\\Console\\": "Console/src"
         }
     },
     "extra": {

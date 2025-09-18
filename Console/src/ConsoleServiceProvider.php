@@ -3,6 +3,8 @@
 namespace Digipemad\Sia\Console;
 
 use Illuminate\Support\ServiceProvider;
+use Digipemad\Sia\Console\SiaMigrateCommand;
+
 
 class ConsoleServiceProvider extends ServiceProvider
 {
