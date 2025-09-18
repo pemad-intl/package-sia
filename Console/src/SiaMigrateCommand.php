@@ -4,6 +4,7 @@ namespace Digipemad\Sia\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
 
 class SiaMigrateCommand extends Command
 {
@@ -39,13 +40,30 @@ class SiaMigrateCommand extends Command
             if (File::exists($migrationsPath)) {
                 $relativePath = str_replace(base_path() . DIRECTORY_SEPARATOR, '', $migrationsPath);
                 $relativePath = str_replace('\\', '/', $relativePath);
-                
-                $this->info("Migrating: $modulePath");
-                $this->call('migrate', [
-                    '--path' => $relativePath,
-                    '--database' => 'pgsql', 
-                    '--force' => $this->option('force')
-                ]);
+
+                $migrations = File::files($migrationsPath);
+
+                // Cek apakah ada migration baru
+                $hasNewMigration = false;
+                foreach ($migrations as $migration) {
+                    $migrationName = pathinfo($migration, PATHINFO_FILENAME);
+                    $exists = \DB::table('migrations')->where('migration', $migrationName)->exists();
+                    if (!$exists) {
+                        $hasNewMigration = true;
+                        break;
+                    }
+                }
+
+                if ($hasNewMigration) {
+                    $this->info("Migrating: $modulePath");
+                    $this->call('migrate', [
+                        '--path' => $relativePath,
+                        '--database' => 'pgsql', 
+                        '--force' => $this->option('force')
+                    ]);
+                } else {
+                    $this->info("Module $modulePath: no new migrations.");
+                }
             }
         }
 
