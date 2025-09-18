@@ -4,6 +4,7 @@ namespace Digipemad\Sia\Teacher;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
+use App\Services\SidebarManager;
 use Illuminate\Support\Facades\Blade;
 
 class TeacherServiceProvider extends ServiceProvider
@@ -18,7 +19,7 @@ class TeacherServiceProvider extends ServiceProvider
      */
     protected $moduleNameLower = 'teacher';
 
-    public function boot()
+    public function boot(SidebarManager $sidebar)
     {
         $this->app->register(AuthServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
@@ -28,6 +29,14 @@ class TeacherServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__ . '/Resources/Views', $this->moduleNameLower);
         $this->loadViewsFrom(__DIR__ . '/Resources/Components', 'x-' . $this->moduleNameLower);
+
+        $sidebar->addMenu([
+            'title' => 'Guru',
+            'route' => 'teacher::home',
+            'icon'  => 'bx bxs-book-content',
+            'module' => 'digipemad/sia',
+            'can' => 'teacher::access'
+        ]);
 
         Blade::componentNamespace('Digipemad\\Sia\\' . $this->moduleName . '\\Resources\\Components', $this->moduleNameLower);
     }

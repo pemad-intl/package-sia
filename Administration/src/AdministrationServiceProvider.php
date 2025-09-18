@@ -5,6 +5,7 @@ namespace Digipemad\Sia\Administration;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Facades\Blade;
+use App\Services\SidebarManager;
 use Modules\Account\Models\User;
 use Digipemad\Sia\Administration\Models\School;
 use Digipemad\Sia\Administration\Models\Traits\Account\UserTrait as AdministrationTrait;
@@ -21,7 +22,7 @@ class AdministrationServiceProvider extends ServiceProvider
      */
     protected $moduleNameLower = 'administration';
 
-    public function boot()
+    public function boot(SidebarManager $sidebar)
     {
         $this->app->register(AuthServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
@@ -36,6 +37,14 @@ class AdministrationServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__ . '/Resources/Views', $this->moduleNameLower);
         $this->loadViewsFrom(__DIR__ . '/Resources/Components', 'x-' . $this->moduleNameLower);
+
+        $sidebar->addMenu([
+            'title' => 'Tata Usaha',
+            'route' => 'administration::dashboard',
+            'icon'  => 'bx bxs-buildings',
+            'module' => 'digipemad/sia',
+            'can' => 'administration::access'
+        ]);
 
         Blade::componentNamespace('Digipemad\\Sia\\' . $this->moduleName . '\\Resources\\Components', $this->moduleNameLower);
     }

@@ -3,6 +3,7 @@
 namespace Digipemad\Sia\Boarding;
 
 use Illuminate\Support\ServiceProvider;
+use App\Services\SidebarManager;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Facades\Blade;
 
@@ -18,7 +19,7 @@ class BoardingServiceProvider extends ServiceProvider
      */
     protected $moduleNameLower = 'boarding';
 
-    public function boot()
+    public function boot(SidebarManager $sidebar)
     {
         $this->app->register(AuthServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
@@ -28,6 +29,14 @@ class BoardingServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__ . '/Resources/Views', $this->moduleNameLower);
         $this->loadViewsFrom(__DIR__ . '/Resources/Components', 'x-' . $this->moduleNameLower);
+
+        $sidebar->addMenu([
+            'title' => 'Pondok',
+            'route' => 'boarding::dashboard',
+            'icon'  => 'bx bx-home-circle',
+            'module' => 'digipemad/sia',
+            'can' => 'boarding::access'
+        ]);
 
         Blade::componentNamespace('Digipemad\\Sia\\' . $this->moduleName . '\\Resources\\Components', $this->moduleNameLower);
     }

@@ -29,6 +29,14 @@
             }
         }
     },
+    "scripts": {
+        "post-install-cmd": [
+            "@php artisan migrate --force"
+        ],
+        "post-update-cmd": [
+            "@php artisan migrate --force"
+        ]
+    },
     "require": {
         "php": ">=8.0",
         "illuminate/support": "^10.0"

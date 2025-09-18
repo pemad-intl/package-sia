@@ -4,6 +4,7 @@ namespace Digipemad\Sia\Counseling;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
+use App\Services\SidebarManager;
 use Illuminate\Support\Facades\Blade;
 
 class CounselingServiceProvider extends ServiceProvider
@@ -18,7 +19,7 @@ class CounselingServiceProvider extends ServiceProvider
      */
     protected $moduleNameLower = 'counseling';
 
-    public function boot()
+    public function boot(SidebarManager $sidebar)
     {
         $this->app->register(AuthServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
@@ -28,6 +29,15 @@ class CounselingServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__ . '/Resources/Views', $this->moduleNameLower);
         $this->loadViewsFrom(__DIR__ . '/Resources/Components', 'x-' . $this->moduleNameLower);
+
+        $sidebar->addMenu([
+            'title' => 'Konseling',
+            'route' => 'counseling::home',
+            'icon'  => 'bx bx-user-voice',
+            'module' => 'digipemad/sia',
+            'can' => 'counseling::access'
+        ]);
+
 
         Blade::componentNamespace('Modules\\' . $this->moduleName . '\\Resources\\Components', $this->moduleNameLower);
     }

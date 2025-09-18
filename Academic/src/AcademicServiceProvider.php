@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Facades\Blade;
 use Modules\Account\Models\User;
 use Digipemad\Sia\Academic\Models\Student;
+use App\Services\SidebarManager;
 use Digipemad\Sia\Academic\Models\Traits\Account\UserTrait as UserAcademicTrait;
+use Illuminate\Database\Eloquent\Builder;
 
 class AcademicServiceProvider extends ServiceProvider
 {
@@ -21,16 +23,21 @@ class AcademicServiceProvider extends ServiceProvider
      */
     protected $moduleNameLower = 'academic';
 
-    public function boot()
+    public function register()
+    {        
+        $this->mergeConfigFrom(
+            __DIR__ . '/../Config/' . $this->moduleNameLower . '.php',
+            'modules.' . $this->moduleNameLower
+        );
+
+    }
+
+    public function boot(SidebarManager $sidebar)
     {
+        $this->loadDynamicRelationships();
         $this->app->register(AuthServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
-        
-        // User::mixin(new class {
-        //     use UserAcademicTrait;
-        // });
 
-        $this->loadDynamicRelationships();
         $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
 
 
@@ -40,31 +47,11 @@ class AcademicServiceProvider extends ServiceProvider
         Blade::componentNamespace('Digipemad\\Sia\\' . $this->moduleName . '\\Resources\\Components', $this->moduleNameLower);
     }
 
-    public function register()
-    {
-        $this->mergeConfigFrom(
-            __DIR__ . '/../Config/' . $this->moduleNameLower . '.php',
-            'modules.' . $this->moduleNameLower
-        );
-    }
-
     public function loadDynamicRelationships()
     {
         User::resolveRelationUsing('student', function (User $user) {
             return $user->hasOne(Student::class, 'user_id');
         });
-
-        // User::resolveRelationUsing('employee', function ($user) {
-        //     return $user->hasOne(Employee::class, 'user_id')->withDefault();
-        // });
-
-        // Position::resolveRelationUsing('employees', function ($position) {
-        //     return $position->belongsToMany(Employee::class, 'empl_positions', 'position_id', 'empl_id')->withPivot('id');
-        // });
-
-        // Position::resolveRelationUsing('employeePositions', function ($position) {
-        //     return $position->hasMany(EmployeePosition::class, 'position_id');
-        // });
     }
 
     /**
